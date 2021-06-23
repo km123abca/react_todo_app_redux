@@ -1,56 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import Input from "./components/Input";
+import TodoItem from "./components/TodoItem";
+import { useSelector } from "react-redux";
+import { selectTodoList } from "./features/todoSlice";
+import { useDispatch } from "react-redux";
+import { reloadTodos } from "./features/todoSlice";
+import { getFromDB } from "./components/Databasefns";
+const todoList2 = [
+  { item: "todo1", done: false, id: 1 },
+  { item: "todo2", done: true, id: 2 },
+];
 
 function App() {
+  const dispatch = useDispatch();
+  const todoList = useSelector(selectTodoList);
+  let [suscribed, setSuscribed] = useState(true);
+  useEffect(() => {
+    dispatch(reloadTodos(getFromDB()));
+    return () => {
+      setSuscribed(false);
+    };
+  }, []);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+      <div className="app__container">
+        <div className="app__todoContainer">
+          {todoList.map((x, k) => (
+            <TodoItem name={x.item} done={x.done} id={x.id} key={k} />
+          ))}
+        </div>
+        <Input />
+      </div>
     </div>
   );
 }

@@ -1,0 +1,60 @@
+1. npx create-react-app . --template redux
+2. delete App.text.js,setupTests.js
+3. create todoSlice.js inside features
+    import { createSlice } from "@reduxjs/toolkit";
+    const initialState = {};
+    const todoSlice = createSlice({
+    name: sliceName,
+    initialState,
+    reducers: {},
+    });
+
+    export const {} = todoSlice.actions;
+    export default todoSlice.reducer;
+4.
+    import { createSlice } from "@reduxjs/toolkit";
+    const initialState = { todoList: [] };
+    const todoSlice = createSlice({
+    name: "todos",
+    initialState,
+    reducers: {
+        saveTodo: (state, action) => {
+        state.todoList.push(action.payload);
+        },
+    },
+    });
+
+    export const { saveTodo } = todoSlice.actions;
+    export default todoSlice.reducer;
+5. in Store.js in App folder
+    import { configureStore } from "@reduxjs/toolkit";
+    import todoReducer from "../features/todoSlice";
+
+    export const store = configureStore({
+    reducer: {
+        todos: todoReducer,
+    },
+    });
+6.
+
+How to use them in input.js
+
+    import { useDispatch } from "react-redux";
+    import { saveTodo } from "../features/todoSlice";
+
+    function Input() {
+    const addTodo = () => {
+        dispatch(
+        saveTodo({
+            input: input,
+            done: false,
+            id: Date.now(),
+        })
+        );
+    };
+    //other stuff
+    }
+
+7. install stuff with yarn
+   yarn add @material-ui/core
+
